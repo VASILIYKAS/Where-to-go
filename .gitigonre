@@ -1,0 +1,23 @@
+# Django
+*.sqlite3
+*.pyc
+__pycache__/
+db.sqlite3
+
+# Virtual Environment
+venv/
+.env/
+.env.local
+
+# IDE
+.idea/
+.vscode/
+
+# Статические файлы (если используются)
+staticfiles/
+media/
+
+# Логи и временные файлы
+*.log
+*.pot
+*.py[co]
