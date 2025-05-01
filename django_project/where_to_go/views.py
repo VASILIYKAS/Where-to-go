@@ -1,6 +1,5 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def show_map(request):
-    print('Кто-то зашёл на главную!')
-    return HttpResponse('Привет!')
+    return render(request, 'index.html')
