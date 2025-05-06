@@ -16,13 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from where_to_go import views
+from where_to_go.views import show_places
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.show_map),
+    path('', show_places),
 ]
 
 if settings.DEBUG:

@@ -38,37 +38,7 @@
       width: 100px;
     }
   </style>
-  <script id="places-geojson" type="application/json">
-    {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [37.62, 55.793676]
-          },
-          "properties": {
-            "title": "«Легенды Москвы",
-            "placeId": "moscow_legends",
-            "detailsUrl": "{% static 'places/moscow_legends.json' %}"
-          }
-        },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [37.64, 55.753676]
-          },
-          "properties": {
-            "title": "Крыши24.рф",
-            "placeId": "roofs24",
-            "detailsUrl": "{% static 'places/roofs24.json' %}"
-          }
-        }
-      ]
-    }
-  </script>
+  <p>{{ geojson_data|json_script:"places-geojson" }}</p>
 
   <script id="app-template" type="text/template">
     <div v-bind:class="{'sidebar-content': 1, 'bg-white': selectedPlace, 'bg-secondary': !selectedPlace}">
@@ -89,7 +59,7 @@
 
         <h5 class="mb-3">{{ selectedPlace.title }}</h5>
 
-        <p>{{ selectedPlace.short_description }}</p>
+        <p>{{ selectedPlace.description_short }}</p>
 
         <div id="place-photos" class="carousel slide mb-3 shadow" data-ride="carousel" data-interval="5000">
           <ol class="carousel-indicators">
