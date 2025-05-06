@@ -23,7 +23,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', show_places),
-    path('place/<int:place_id>/', get_place_details)
+    path(
+        'places/<int:place_id>/json/',
+        get_place_details,
+        name='place-json-details'
+    )
 ]
 
 if settings.DEBUG:
