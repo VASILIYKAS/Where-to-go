@@ -1,14 +1,16 @@
 from django.contrib import admin
 from .models import Place, PlaceImage
 from django.utils.html import format_html
+from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 
 
-class PlaceImageInline(admin.TabularInline):
+class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
     model = PlaceImage
-    extra = 1
+    extra = 3
     fields = ('image', 'get_preview', 'position')
     readonly_fields = ('get_preview',)
-
+    ordering = ['position']
+    
     def get_preview(self, obj):
         if obj.pk and obj.image:
             return format_html(
@@ -18,12 +20,11 @@ class PlaceImageInline(admin.TabularInline):
                 </div>
                 ''',
                 obj.image.url,
-                obj.image.name.split('/')[-1]
                 )
         return "Нет файла"
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [PlaceImageInline]
     list_display = ('title',)
