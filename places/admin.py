@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import Place, PlaceImage
 from django.utils.html import format_html
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
+from django import forms
+from tinymce.widgets import TinyMCE
 
 
 class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
@@ -24,7 +26,14 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
         return "Нет файла"
 
 
+class PlaceAdminForm(forms.ModelForm):
+    class Meta:
+        model = Place
+        fields = '__all__'
+
+
 @admin.register(Place)
 class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
+    form = PlaceAdminForm
     inlines = [PlaceImageInline]
     list_display = ('title',)
