@@ -1,23 +1,47 @@
-# Django
-*.sqlite3
-*.pyc
-__pycache__/
-db.sqlite3
-
-# Virtual Environment
+### Python ###
+# Виртуальные окружения (все возможные варианты)
+.venv/
 venv/
-.env/
-.env.local
+env/
+ENV/
+venv*/
+env*/
+*.venv/
 
-# IDE
+# Файлы окружения
+.env
+.env.local
+.env*.local
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+
+### Django ###
+*.sqlite3
+db.sqlite3
+/media/
+/staticfiles/
+
+### IDE ###
 .idea/
 .vscode/
+*.swp
+*.swo
 
-# Статические файлы (если используются)
-staticfiles/
-/media/
+### Системные файлы ###
+.DS_Store
+Thumbs.db
 
-# Логи и временные файлы
-*.log
-*.pot
-*.py[co]
+### Тесты и покрытие ###
+.coverage
+htmlcov/
+.coverage.*
+*.cover
+*.mo
