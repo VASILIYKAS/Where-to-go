@@ -12,7 +12,7 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
     fields = ('image', 'get_preview', 'position')
     readonly_fields = ('get_preview',)
     ordering = ['position']
-    
+
     def get_preview(self, obj):
         if obj.pk and obj.image:
             return format_html(
@@ -37,3 +37,4 @@ class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     form = PlaceAdminForm
     inlines = [PlaceImageInline]
     list_display = ('title',)
+    search_fields = ('title',)
