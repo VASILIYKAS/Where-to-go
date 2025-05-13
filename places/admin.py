@@ -1,9 +1,9 @@
-from django.contrib import admin
-from .models import Place, PlaceImage
-from django.utils.html import format_html
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 from django import forms
-from tinymce.widgets import TinyMCE
+from django.contrib import admin
+from django.utils.html import format_html
+
+from .models import Place, PlaceImage
 
 
 class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
@@ -30,6 +30,9 @@ class PlaceAdminForm(forms.ModelForm):
     class Meta:
         model = Place
         fields = '__all__'
+        widgets = {
+            'description_long': forms.Textarea(attrs={'cols': 80, 'rows': 30}),
+        }
 
 
 @admin.register(Place)

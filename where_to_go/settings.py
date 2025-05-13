@@ -1,13 +1,18 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-b3q+%@=k#^vwu9-#=oqz^)jd-)rlzda319h7_52c)f0w$adci1')
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+if not SECRET_KEY:
+    raise ImproperlyConfigured('SECRET_KEY в переменных окружения не установлен')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 

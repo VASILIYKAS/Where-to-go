@@ -1,10 +1,12 @@
 import json
 import os
-from django.core.management.base import BaseCommand
-from places.models import Place, PlaceImage
+from urllib.parse import urlparse, unquote
+
 import requests
 from django.core.files.base import ContentFile
-from urllib.parse import urlparse, unquote
+from django.core.management.base import BaseCommand
+
+from places.models import Place, PlaceImage
 
 
 class Command(BaseCommand):
