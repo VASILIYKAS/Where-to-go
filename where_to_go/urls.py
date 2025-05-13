@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', show_places),
     path(
-        'places/<int:place_id>/json/',
+        'places/<int:place_id>/',
         get_place_details,
         name='place-json-details'
     ),
