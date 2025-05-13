@@ -31,7 +31,7 @@ class PlaceAdminForm(forms.ModelForm):
         model = Place
         fields = '__all__'
         widgets = {
-            'description_long': forms.Textarea(attrs={'cols': 80, 'rows': 30}),
+            'long_description': forms.Textarea(attrs={'cols': 80, 'rows': 30}),
         }
 
 
