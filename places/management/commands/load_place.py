@@ -19,37 +19,29 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         json_url = options['json_url']
 
-        if 'github.com' in json_url and '/blob/' in json_url:
-            json_url = json_url.replace(
-                'github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
+        response = requests.get(json_url)
+        response.raise_for_status()
+        raw_place = response.json()
 
-            response = requests.get(json_url)
-            response.raise_for_status()
-            place_info = response.json()
+        place, created = Place.objects.get_or_create(
+            title=raw_place['title'],
+            defaults={
+                'short_description': raw_place['description_short'],
+                'long_description': raw_place['description_long'],
+                'lng': raw_place['coordinates']['lng'],
+                'lat': raw_place['coordinates']['lat']
+            }
+        )
 
-            place, created = Place.objects.get_or_create(
-                title=place_info['title'],
-                defaults={
-                    'short_description': place_info.get('short_description', ''),
-                    'long_description': place_info.get('long_description', ''),
-                    'lng': place_info['coordinates']['lng'],
-                    'lat': place_info['coordinates']['lat']
-                }
-            )
+        if created:
+            self.stdout.write(self.style.SUCCESS(f'Создано новое место: {place.title}'))
+        else:
+            self.stdout.write(self.style.WARNING(f'Место уже существует: {place.title}'))
 
-            if created:
-                self.stdout.write(self.style.SUCCESS(f'Создано новое место: {place.title}'))
-            else:
-                self.stdout.write(self.style.WARNING(f'Место уже существует: {place.title}'))
-
-            self.download_images(place, place_info.get('imgs', []))
+        self.download_images(place, raw_place.get('imgs', []))
 
     def download_images(self, place, image_urls):
         for position, url in enumerate(image_urls, start=1):
-            if 'github.com' in url and '/blob/' in url:
-                url = url.replace(
-                    'github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
-
             response = requests.get(url)
             response.raise_for_status()
 
