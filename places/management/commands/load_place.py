@@ -34,24 +34,29 @@ class Command(BaseCommand):
         )
 
         if created:
-            self.stdout.write(self.style.SUCCESS(f'Создано новое место: {place.title}'))
+            self.stdout.write(self.style.SUCCESS(
+                f'Создано новое место: {place.title}'))
         else:
-            self.stdout.write(self.style.WARNING(f'Место уже существует: {place.title}'))
+            self.stdout.write(self.style.WARNING(
+                f'Место уже существует: {place.title}'))
 
         self.download_images(place, raw_place.get('imgs', []))
 
     def download_images(self, place, image_urls):
         for position, url in enumerate(image_urls, start=1):
+            self.stdout.write(
+                f'Обработка изображения {position}/{len(image_urls)}')
             response = requests.get(url)
             response.raise_for_status()
 
             parsed_url = urlparse(url)
             filename = os.path.basename(unquote(parsed_url.path))
 
-            place_image = PlaceImage(place=place, position=position)
-
-            place_image.image.save(
-                filename,
-                ContentFile(response.content),
-                save=True
+            PlaceImage.objects.create(
+                place=place,
+                position=position,
+                image=ContentFile(response.content, name=filename)
             )
+        self.stdout.write(self.style.SUCCESS(
+            f'Все изображения "{place.title}" успешно загружены.'
+        ))
