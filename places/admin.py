@@ -91,7 +91,7 @@ class PlaceImageAdmin(admin.ModelAdmin):
                 queryset.update(place=target_place)
                 self.message_user(
                     request,
-                    f'Успешно перенесено {count} изображений в место '{target_place.title}'',
+                    f'Успешно перенесено {count} изображений в место {target_place.title}',
                     messages.SUCCESS
                 )
                 return HttpResponseRedirect(request.get_full_path())
