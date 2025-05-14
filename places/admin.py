@@ -14,7 +14,7 @@ from .models import Place, PlaceImage
 class MoveImagesForm(forms.Form):
     target_place = forms.ModelChoiceField(
         queryset=Place.objects.all(),
-        label="Перенести в место"
+        label='Перенести в место'
     )
 
 
@@ -30,12 +30,12 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
             return format_html(
                 '''
                 <div>
-                  <img src="{}" style="max-width: 300px; max-height: 200px;"/>
+                  <img src='{}' style='max-width: 300px; max-height: 200px;'/>
                 </div>
                 ''',
                 obj.image.url,
             )
-        return "Нет файла"
+        return 'Нет файла'
 
 
 class PlaceAdminForm(forms.ModelForm):
@@ -63,9 +63,9 @@ class PlaceImageAdmin(admin.ModelAdmin):
     actions = ['move_images']
 
     def place_title(self, obj):
-        return obj.place.title if obj.place else "-"
+        return obj.place.title if obj.place else '-'
 
-    place_title.short_description = "Название места"
+    place_title.short_description = 'Название места'
     place_title.admin_order_field = 'place__title'
 
     def fetch_preview(self, obj):
@@ -73,14 +73,14 @@ class PlaceImageAdmin(admin.ModelAdmin):
             return format_html(
                 '''
                 <div>
-                  <img src="{}" style="max-width: 300px; max-height: 200px;"/>
+                  <img src='{}' style='max-width: 300px; max-height: 200px;'/>
                 </div>
                 ''',
                 obj.image.url,
             )
-        return "Нет файла"
+        return 'Нет файла'
 
-    fetch_preview.short_description = "Превью"
+    fetch_preview.short_description = 'Превью'
 
     def move_images(self, request, queryset):
         if 'apply' in request.POST:
@@ -91,7 +91,7 @@ class PlaceImageAdmin(admin.ModelAdmin):
                 queryset.update(place=target_place)
                 self.message_user(
                     request,
-                    f"Успешно перенесено {count} изображений в место '{target_place.title}'",
+                    f'Успешно перенесено {count} изображений в место '{target_place.title}'',
                     messages.SUCCESS
                 )
                 return HttpResponseRedirect(request.get_full_path())
@@ -110,7 +110,7 @@ class PlaceImageAdmin(admin.ModelAdmin):
             }
         )
 
-    move_images.short_description = "Перенести выбранные изображения"
+    move_images.short_description = 'Перенести выбранные изображения'
 
     def get_urls(self):
         urls = super().get_urls()
