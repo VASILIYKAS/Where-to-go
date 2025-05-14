@@ -18,7 +18,7 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.StackedInline):
             return format_html(
                 '''
                 <div>
-                  <img src="{}" style="max-height: 200px;"/>
+                  <img src="{}" style="max-width: 300px; max-height: 200px;"/>
                 </div>
                 ''',
                 obj.image.url,
