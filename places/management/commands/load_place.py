@@ -1,8 +1,9 @@
-import json
 import os
+import time
 from urllib.parse import urlparse, unquote
 
 import requests
+
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
@@ -43,10 +44,34 @@ class Command(BaseCommand):
         self.download_images(place, raw_place.get('imgs', []))
 
     def download_images(self, place, image_urls):
+        success_count = 0
         for position, url in enumerate(image_urls, start=1):
-            self.stdout.write(
-                f'Обработка изображения {position}/{len(image_urls)}')
-            response = requests.get(url)
+            try:
+                self.process_single_image(place, position, url)
+                success_count += 1
+            except requests.exceptions.HTTPError as e:
+                self.stderr.write(self.style.ERROR(
+                    f'HTTP ошибка ({url}): {str(e)}'))
+            except requests.exceptions.ConnectionError as e:
+                self.stderr.write(self.style.ERROR(
+                    f'Ошибка соединения ({url}): {str(e)}.'))
+            except Exception as e:
+                self.stderr.write(self.style.ERROR(
+                    f'Неизвестная ошибка ({url}): {str(e)}'))
+
+        total = len(image_urls)
+        if success_count == total:
+            self.stdout.write(self.style.SUCCESS(
+                f'Все {total} изображения "{place.title}" успешно загружены.'))
+        else:
+            self.stdout.write(self.style.WARNING(
+                f'Успешно загружено {success_count} из {total} изображений для "{place.title}"'))
+
+    def process_single_image(self, place, position, url):
+        self.stdout.write(f'Загрузка изображения {position}')
+
+        try:
+            response = requests.get(url, stream=True)
             response.raise_for_status()
 
             parsed_url = urlparse(url)
@@ -57,6 +82,10 @@ class Command(BaseCommand):
                 position=position,
                 image=ContentFile(response.content, name=filename)
             )
-        self.stdout.write(self.style.SUCCESS(
-            f'Все изображения "{place.title}" успешно загружены.'
-        ))
+            return True
+
+        except requests.exceptions.ConnectionError as e:
+            self.stderr.write(self.style.ERROR(
+                f'Ошибка соединения ({url}): {str(e)}.'))
+            time.sleep(3)
+            return
