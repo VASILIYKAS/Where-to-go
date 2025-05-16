@@ -82,7 +82,7 @@ class Command(BaseCommand):
                 position=position,
                 image=ContentFile(response.content, name=filename)
             )
-            return True
+            return
 
         except requests.exceptions.ConnectionError as e:
             self.stderr.write(self.style.ERROR(
