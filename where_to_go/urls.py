@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from where_to_go.views import get_place_details, show_places
+from places.views import get_place_details, show_places
 
 
 urlpatterns = [
