@@ -82,10 +82,8 @@ class Command(BaseCommand):
                 position=position,
                 image=ContentFile(response.content, name=filename)
             )
-            return
 
         except requests.exceptions.ConnectionError as e:
             self.stderr.write(self.style.ERROR(
                 f'Ошибка соединения ({url}): {str(e)}.'))
             time.sleep(3)
-            return
